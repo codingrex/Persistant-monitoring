@@ -78,84 +78,91 @@ dispFlag = True
 keyPress = 1
 a = time.time()
 
+# rlAgent = sNN.SimpleNNagent(env)
+rlAgent = cNN.SimplecNNagent(env)
+
+rlAgent.loadModel("checkpoints/agentModelFC1.pt")
+
+NUM_EPISODES = 5
+LEN_EPISODES = 2000
+curState = []
+newState = []
+reward_history = []
+reward_last100 = []
+loss_history = []
+dispFlag = True
+
+keyPress = 1
+a = time.time()
+
+
+""" per episode save"""
+per_episode= True
+
 for episode in tqdm(range(NUM_EPISODES)):
-#    LEN_EPISODES = 25 + min(int(episode* 2 /50),80)
+
+
+
+
+    """ if per episode save"""
+    if per_episode:
+        env.out_test = cv2.VideoWriter(f"test_V/testVideo" + str(episode + 1) + ".avi", env.fourcc, 50, (700, 700))
+
+
+
+    #    LEN_EPISODES = 25 + min(int(episode* 2 /50),80)
     a = time.time()
     curRawState = env.reset()
     b = time.time()
-#    print(["reset time = ", round(1000*(b-a),0)])
-    
+    #    print(["reset time = ", round(1000*(b-a),0)])
+
     # generate state for each agent
     curState = rlAgent.formatInput(curRawState)
-    
-    episodeReward  = 0
+
+    episodeReward = 0
     epidoseLoss = 0
-    
+
     for step in range(LEN_EPISODES):
         times = []
         a = time.time()
         # render environment after taking a step
         keyPress = getKeyPress(keyPress)
-        if keyPress == 1:
-            env.render()
-            
+
+
         # Get agent actions
         aActions = []
         for i in range(CONST.NUM_AGENTS):
             # get action for each agent using its current state from the network
             aActions.append(rlAgent.getMaxAction(curState[i]))
-        
+
+        if keyPress == 1:
+            env.render_test(step, aActions[0], episode + 1)
+            env.save_test(step, aActions[0], episode + 1)
+
+        #print(aActions)
+
         # do actions
         a = time.time()
-        agentPosList, display, reward, done = env.step(aActions)
+        agentPosList, display, reward, newAreaVis, penalty, done = env.step(aActions)
         b = time.time()
-        times.append(["step time", round(1000*(b-a),0)])
+        times.append(["step time", round(1000 * (b - a), 0)])
         a = time.time()
         # update nextState
         newRawState = []
         for agentPos in agentPosList:
             newRawState.append([agentPos, display])
         newState = rlAgent.formatInput(newRawState)
-        
-#        print(times)
-        
+
+        #        print(times)
+
         # record history
-#        reward = sum(rewardList)
+        #        reward = sum(rewardList)
         episodeReward += reward
-        
+
+
+
         # set current state for next step
         curState = newState
-        
-        
+
         if done:
             break
-        
-    # post episode
-    
-    
-    # Record history
-    if len(reward_history) < 1:
-        reward_last100.append(0)
-    elif len(reward_history) <=100:
-        reward_last100.append(sum(reward_history)/ len(reward_history))
-    else:
-        reward_last100.append(sum(reward_history[-100:])/100)
-    reward_history.append(episodeReward)
-    rlAgent.summaryWriter_addMetrics(episode, 0, episodeReward, reward_last100[-1],step + 1)
-    # You may want to plot periodically instead of after every episode
-    # Otherwise, things will slow
-    if episode % 10 == 0:
-        if dispFlag:
-            fig = plt.figure(2)
-            plt.clf()
-            plt.xlim([0,NUM_EPISODES])
-            plt.plot(reward_history,'ro')
-            plt.plot(reward_last100)
-            plt.xlabel('Episode')
-            plt.ylabel('Reward')
-            plt.title('Reward Per Episode')
-            plt.pause(0.01)
-            fig.canvas.draw()
-            
-        
-            

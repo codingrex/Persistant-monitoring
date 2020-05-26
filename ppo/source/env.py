@@ -228,14 +228,14 @@ class Env:
 
 
         #Adversary, left unused for now
-        """
         advrsyPos = [adversary.getState()[0] for adversary in self.adversaries]
         advPos = self.cartesian2Grid(advrsyPos)
-        self.currentMapState = self.updatePosMap(advPos, temp, 200)
+        self.advObsPlusViewed = self.vsb.updateVsbOnImg(advrsyPos,self.obstacleMap, self.vsbPoly)
+        self.advObsPlusViewed = self.updatePosMap(advPos, self.advObsPlusViewed, 200)
 
         
         AdvVisibility = self.vsb.checkPtInVsbPoly(advrsyPos, agentPos)
-        """
+
 
         #currently set adversary visibility to false : does't consider
         AdvVisibility= False
@@ -246,7 +246,7 @@ class Env:
         reward = sumR + penalty
         #done = np.count_nonzero(self.currentMapState==0) == 0
         done= False
-        return agentPos, display, reward, sumR, penalty, done
+        return agentPos,advrsyPos,  display, reward, sumR, penalty, done
 
     def render(self, show = 0):
         cap= self.cap

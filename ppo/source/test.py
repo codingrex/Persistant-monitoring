@@ -56,11 +56,11 @@ for episode in tqdm(range(NUM_EPISODES)):
     for step in range(1000000):
         # step agent
         actions = [getKeyPress()]
-        agentPosList, display, rewardList,_, _,  done = env.step(actions)
+        agentPosList, advrsyPosList, display, reward, newAreaVis, penalty, done = env.step(actions)
 #        print(rewardList, done)
 #        print(agentPosList)
 
-        print(rewardList)
+        print(reward)
 
         #print(display)
 

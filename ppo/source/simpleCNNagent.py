@@ -61,10 +61,10 @@ class SimplecNNagent():
         self.actnList = []
         self.trainX = []
         self.trainY = []
-        self.maxReplayMemory = 15000
+        self.maxReplayMemory = 3000
         self.epsilon = 1
         self.minEpsilon = 0.1
-        self.epsilonDecay = 0.9999769
+        self.epsilonDecay = 0.9999539
         self.discount = 0.95
         self.learningRate = 0.0000001
         self.batchSize = 32
@@ -198,7 +198,7 @@ class SimplecNNagent():
         torch.save(self.model, f"{filePath}/{self.model.__class__.__name__}.pt")
     
     def loadModel(self, filePath):
-        self.model = torch.load(filePath)
+        self.model = torch.load(filePath, map_location=torch.device('cpu'))
         self.model.eval()
     
     def formatInput(self, states):

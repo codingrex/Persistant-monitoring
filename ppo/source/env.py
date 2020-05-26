@@ -34,7 +34,7 @@ class Env:
 
 
 
-        self.obstacleMap , self.vsb, self.mapId = self.setRandMap_vsb()
+        self.obstacleMap , self.vsb, self.vsbPoly, self.mapId = self.setRandMap_vsb()
         self.obstacleMap,self.obsPlusViewed, self.currentMapState, self.agents, self.adversaries = self.initTotalArea_agents(CONST.NUM_AGENTS)
 
         # modified: reward map

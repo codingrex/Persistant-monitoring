@@ -62,7 +62,7 @@ for episode in tqdm(range(NUM_EPISODES)):
 
         print(rewardList)
 
-        print(display)
+        #print(display)
 
 
 

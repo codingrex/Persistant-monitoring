@@ -2,7 +2,7 @@
 
 import warnings
 warnings.filterwarnings('ignore')
-import keyboard
+#import keyboard
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,6 +18,8 @@ CONST = CONSTANTS()
 
 np.set_printoptions(threshold = np.inf, linewidth = 1000 ,precision=3, suppress=True)
 
+
+"""
 def getKeyPressOld(act):
     k = cv2.waitKeyEx(1) 
     #            print(k)
@@ -38,6 +40,7 @@ def getKeyPress(act):
         act = 2
     return act
 
+"""
 
 env = Env()
 
@@ -59,7 +62,7 @@ dispFlag = False
 #curState = rlAgent.formatInput(curRawState)
 #rlAgent.summaryWriter_showNetwork(curState[0])
 
-keyPress = 1
+keyPress = 0
 timestep = 0
 loss = None
 
@@ -78,7 +81,7 @@ for episode in tqdm(range(NUM_EPISODES)):
         timestep += 1
         
         # render environment after taking a step
-        keyPress = getKeyPress(keyPress)
+        keyPress = 0
         
         if keyPress == 1:
             env.render()

@@ -139,10 +139,12 @@ class Env:
 
         # modified: previous sum of reward
         #self.prevSumR = np.sum(self.rewardMap)
+
+        advrsyPos = [adversary.getState()[0] for adversary in self.adversaries]
         
         state = []
         for agent in self.agents:
-            state.append([agent.getState()[0],self.currentMapState])
+            state.append([agent.getState()[0], advrsyPos, self.currentMapState])
         
         return state
         

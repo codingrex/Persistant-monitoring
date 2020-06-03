@@ -45,7 +45,7 @@ env.render()
 
 for episode in tqdm(range(NUM_EPISODES)):
     env.reset()
-    env.render(1)
+    env.render_test(0, None, episode)
 
 
 
@@ -60,6 +60,8 @@ for episode in tqdm(range(NUM_EPISODES)):
 #        print(rewardList, done)
 #        print(agentPosList)
 
+
+        print(np.min(display))
         print(reward)
 
         #print(display)
@@ -71,7 +73,7 @@ for episode in tqdm(range(NUM_EPISODES)):
 
 
 
-        env.render(1)
+        env.render_test(step,None, episode)
         cv2.waitKey(1)
 
         if done:

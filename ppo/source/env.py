@@ -27,9 +27,9 @@ class Env:
         self.obsMaps, self.vsbs, self.vsbPolys = self.initObsMaps_Vsbs()
         self.obstacleMap , self.vsb, self.vsbPoly, self.mapId = self.setRandMap_vsb()
         # modified: decay rate:
-        self.decay= 2
+        self.decay= 1
         # modified: cap the upperbound of penalty
-        self.cap= 200
+        self.cap= 400
 
 
 
@@ -263,7 +263,7 @@ class Env:
 
         heatmapshow = np.where(heatmapshow == 150 , 20, heatmapshow)
         heatmapshow = np.where(heatmapshow < 0, -1 * heatmapshow * 255 / cap, -1 * heatmapshow)
-        heatmapshow = np.where(heatmapshow >= 200, 255, heatmapshow)
+        heatmapshow = np.where(heatmapshow >= self.cap, 255, heatmapshow)
 
 
 
@@ -303,7 +303,8 @@ class Env:
 
         displayImg = self.generate_heat_text(aActions, step, episode)
 
-        self.out_test.write(displayImg.astype('uint8'))
+        #self.out_test.write(displayImg.astype('uint8'))
+        self.out.write(displayImg.astype('uint8'))
 
 
 
@@ -341,11 +342,11 @@ class Env:
         heatmapshow = cv2.putText(heatmapshow, "current step: " + str(count), org4, font,
                                   fontScale, color, thickness, cv2.LINE_AA)
 
-        heatmapshow = cv2.putText(heatmapshow, "total penalty: " + str(reward + penalty), org2, font,
+        if action != None:
+            heatmapshow = cv2.putText(heatmapshow, "total penalty: " + str(reward + penalty), org2, font,
                                   fontScale, color, thickness, cv2.LINE_AA)
-
-        word = self.parse_action(action)
-        heatmapshow = cv2.putText(heatmapshow, "action: " + word, org3, font,
+            word = self.parse_action(action)
+            heatmapshow = cv2.putText(heatmapshow, "action: " + word, org3, font,
                                   fontScale, color, thickness, cv2.LINE_AA)
 
         if(show == 1):

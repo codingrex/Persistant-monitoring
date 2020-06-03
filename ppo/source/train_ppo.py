@@ -48,8 +48,8 @@ memory = Memory()
 rlAgent = PPO(env)
 
 
-NUM_EPISODES = 50000
-LEN_EPISODES = 200
+NUM_EPISODES = 15000
+LEN_EPISODES = 1000
 UPDATE_TIMESTEP = 2000
 curState = []
 newState= []
@@ -87,7 +87,7 @@ for episode in tqdm(range(NUM_EPISODES)):
             env.render()
         
         if episode%500 in range(10,15) and step%4 == 0:
-            env.save2Vid()
+            env.save_test(step, None, episode)
             
         # Get agent actions
         aActions = []

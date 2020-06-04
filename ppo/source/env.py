@@ -27,9 +27,9 @@ class Env:
         self.obsMaps, self.vsbs, self.vsbPolys = self.initObsMaps_Vsbs()
         self.obstacleMap , self.vsb, self.vsbPoly, self.mapId = self.setRandMap_vsb()
         # modified: decay rate:
-        self.decay= 1
+        self.decay= 2
         # modified: cap the upperbound of penalty
-        self.cap= 400
+        self.cap= 200
 
 
 
@@ -295,13 +295,13 @@ class Env:
             return 'right'
 
 
-    def render_test(self, step, aActions, episode):
-        self.generate_heat_text(aActions, step, episode, 1)
+    def render_test(self, step, aActions, episode, test = 0):
+        self.generate_heat_text(aActions, step, episode, 1, test)
 
-    def save_test(self, step, aActions, episode):
+    def save_test(self, step, aActions, episode, test= 0):
 
 
-        displayImg = self.generate_heat_text(aActions, step, episode)
+        displayImg = self.generate_heat_text(aActions, step, episode, show=0, test =test)
 
         #self.out_test.write(displayImg.astype('uint8'))
         self.out.write(displayImg.astype('uint8'))
@@ -310,7 +310,8 @@ class Env:
 
 
 
-    def generate_heat_text(self,  action, count, episode, show= 0):
+
+    def generate_heat_text(self,  action, count, episode, show= 0, test = 0):
         """ initialize heatmap """
         heatmapshow = self.render()
 
@@ -322,6 +323,8 @@ class Env:
         org1 = (10, 15)
         org4 = (10, 45)
         org3 = (450, 45)
+
+        org5= (300, 15)
 
         # fontScale
         fontScale = 0.6
@@ -341,6 +344,11 @@ class Env:
 
         heatmapshow = cv2.putText(heatmapshow, "current step: " + str(count), org4, font,
                                   fontScale, color, thickness, cv2.LINE_AA)
+
+        if test == 1:
+            heatmapshow = cv2.putText(heatmapshow, "[This is a test run for learned policy]", org5, font,
+                                      fontScale, color, thickness, cv2.LINE_AA)
+
 
         if action != None:
             heatmapshow = cv2.putText(heatmapshow, "total penalty: " + str(reward + penalty), org2, font,

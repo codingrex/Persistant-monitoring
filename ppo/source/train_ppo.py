@@ -102,21 +102,21 @@ for episode in tqdm(range(NUM_EPISODES)):
             done = True
         memory.rewards.append(reward)
         memory.is_terminals.append(done)
-        
+
         # update nextState
         newRawState = []
         for agentPos in agentPosList:
             newRawState.append([agentPos, advrsyPosList, display])
         newState = rlAgent.formatInput(newRawState)
         
-        
-        
+
+
         if timestep % UPDATE_TIMESTEP == 0:
             loss = rlAgent.update(memory)
             memory.clear_memory()
             timestep = 0
-            
-        
+
+
         # record history
         episodeReward += reward
         episodeNewVisited += newAreaVis
@@ -129,19 +129,19 @@ for episode in tqdm(range(NUM_EPISODES)):
             break
         
     # post episode
-    
-    # Record history        
+
+    # Record history
     reward_history.append(episodeReward)
     totalViewed.append(np.count_nonzero(display==255))
     mapNewVisPenalty_history[env.mapId].append((episodeReward,episodeNewVisited,episodePenalty,totalViewed[-1]))
-    
+
     # You may want to plot periodically instead of after every episode
     # Otherwise, things will slow
     rlAgent.summaryWriter_addMetrics(episode, loss, reward_history, mapNewVisPenalty_history, LEN_EPISODES)
     if episode % 50 == 0:
         rlAgent.saveModel("checkpoints")
-            
-    
+
+
 rlAgent.saveModel("checkpoints")
 env.out.release()
         

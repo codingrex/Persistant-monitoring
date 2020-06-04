@@ -127,7 +127,19 @@ class ActorCritic(nn.Module):
         memory.logprobs.append(dist.log_prob(action))
         
         return action.item()
-    
+
+    def act_test(self, state):
+        state1 = torch.from_numpy(state[0]).float().to(device)
+        state2 = torch.from_numpy(state[1]).float().to(device)
+        action_probs = self.action_layer(state1.unsqueeze(0), state2.unsqueeze(0))
+        action_probs= action_probs.detach().numpy()[0]
+        action = np.random.choice(
+            np.where(action_probs == np.max(action_probs))[0]
+        )
+
+        return action
+
+
     def evaluate(self, state, action):
         action_probs = self.action_layer(*state)
         dist = Categorical(action_probs)
@@ -250,9 +262,12 @@ class PPO:
     def saveModel(self, filePath):
         torch.save(self.policy, f"{filePath}/{self.policy.__class__.__name__}.pt")
     
-    def loadModel(self, filePath):
-        self.model = torch.load(filePath)
-        self.model.eval()
+    def loadModel(self, filePath, cpu = 0):
+        if cpu == 1:
+            self.policy = torch.load(filePath, map_location=torch.device('cpu'))
+        else:
+            self.policy = torch.load(filePath)
+        self.policy.eval()
     
     def plot_kernels(self,tensor, fig, num_cols=6):
         if not tensor.ndim==4:

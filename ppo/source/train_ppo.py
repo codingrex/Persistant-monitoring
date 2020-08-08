@@ -48,7 +48,7 @@ memory = Memory()
 rlAgent = PPO(env)
 
 
-NUM_EPISODES = 15000
+NUM_EPISODES = 30000
 LEN_EPISODES = 1000
 UPDATE_TIMESTEP = 2000
 curState = []

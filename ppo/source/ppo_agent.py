@@ -260,13 +260,14 @@ class PPO:
         self.sw.close()
         
     def saveModel(self, filePath):
-        torch.save(self.policy, f"{filePath}/{self.policy.__class__.__name__}.pt")
+        torch.save(self.policy.state_dict(), f"{filePath}/{self.policy.__class__.__name__}.pt")
     
     def loadModel(self, filePath, cpu = 0):
+
         if cpu == 1:
-            self.policy = torch.load(filePath, map_location=torch.device('cpu'))
+            self.policy.load_state_dict(torch.load(filePath, map_location=torch.device('cpu')))
         else:
-            self.policy = torch.load(filePath)
+            self.policy.load_state_dict(torch.load(filePath))
         self.policy.eval()
     
     def plot_kernels(self,tensor, fig, num_cols=6):

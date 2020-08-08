@@ -27,9 +27,9 @@ class Env:
         self.obsMaps, self.vsbs, self.vsbPolys = self.initObsMaps_Vsbs()
         self.obstacleMap , self.vsb, self.vsbPoly, self.mapId = self.setRandMap_vsb()
         # modified: decay rate:
-        self.decay= 2
+        self.decay= 1
         # modified: cap the upperbound of penalty
-        self.cap= 200
+        self.cap= 400
 
 
 

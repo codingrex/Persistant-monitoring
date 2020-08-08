@@ -49,7 +49,7 @@ class Obstacle:
 
 
         
-        mp, vsb = self.getObstacleMap(emptyMap, self.obstacle4())
+        mp, vsb = self.getObstacleMap(emptyMap, self.obstacle3())
         obsMaps.append(mp)
         vsbs.append(vsb)
         
